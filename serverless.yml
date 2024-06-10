@@ -1,0 +1,20 @@
+service: league-scheduler-dev
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  createLeagueScheduler:
+    handler: handler.handler
+    # Sem definição de eventos aqui, pois você configurará o EventBridge manualmente
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    #httpPort: 3000 # Esta configuração permanece útil para testes locais com serverless-offline
