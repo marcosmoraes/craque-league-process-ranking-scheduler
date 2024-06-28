@@ -1,9 +1,13 @@
 const { validateEnvVars } = require('./config/config');
 const { getOngoingLeagues } = require('./domain/service/league-service');
 const { sendMessageToQueue } = require('./infrastructure/queue/sqs-queue');
+const { closeAllConnections } = require('./infrastructure/database/connect-database'); // Importe a função closeConnection
 
 exports.handler = async () => {
     console.log('Scheduler started.');
+    let ligaConnection;
+    let craqueConnection;
+
     try {
         validateEnvVars();
 
@@ -24,5 +28,7 @@ exports.handler = async () => {
     } catch (error) {
         console.error('Error during scheduler execution:', error);
         throw new Error('Scheduler execution failed');
+    } finally {
+        await closeAllConnections();
     }
 };

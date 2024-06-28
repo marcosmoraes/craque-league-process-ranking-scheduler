@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const sqs = new AWS.SQS();
+const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 async function sendMessageToQueue(queueUrl, messageBody) {
     console.log('Sending message to queue', queueUrl);
