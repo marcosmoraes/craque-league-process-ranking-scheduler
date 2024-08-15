@@ -1,4 +1,4 @@
-service: league-scheduler-dev
+service: league-process-ranking-scheduler
 
 frameworkVersion: "3"
 
@@ -7,9 +7,9 @@ provider:
   runtime: nodejs18.x
 
 functions:
-  createLeagueScheduler:
+  leagueProcessRankingScheduler:
     handler: handler.handler
-    # Sem definição de eventos aqui, pois você configurará o EventBridge manualmente
+    name: league-process-ranking-scheduler
 
 plugins:
   - serverless-dotenv-plugin
