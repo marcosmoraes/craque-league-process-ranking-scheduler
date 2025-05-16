@@ -40,19 +40,20 @@ graph TB
 ```mermaid
 sequenceDiagram
     participant LH as Lambda Handler
-    participant UC as Use Cases
-    participant SV as Services
+    participant UC as League Processing
+    participant SV as LeagueService
     participant DB as MongoDB
     participant Q as SQS Queue
     
-    LH->>UC: Process League
-    UC->>SV: Execute Business Logic
-    SV->>DB: Query League Data
-    DB-->>SV: Return Data
-    SV->>Q: Send Processing Message
+    LH->>UC: handler()
+    UC->>SV: getOngoingLeagues()
+    SV->>DB: Query Active Leagues
+    DB-->>SV: Return Leagues
+    SV->>SV: processLeagueData()
+    SV->>Q: sendMessageToQueue()
     Q-->>SV: Message Sent
-    SV-->>UC: Process Result
-    UC-->>LH: Return Status
+    SV-->>UC: Processing Status
+    UC-->>LH: Return Result
 ```
 
 ## System Layers
