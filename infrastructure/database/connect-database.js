@@ -4,32 +4,46 @@ let cachedLigaConnection = null;
 let cachedCraqueConnection = null;
 
 async function connectToDatabase(username, password, database) {
-    const connectionString = `mongodb+srv://${username}:${encodeURIComponent(password)}@cluster0.slvyghg.mongodb.net/${database}?retryWrites=true&w=majority`;
+    if (!username || !password || !database) {
+        throw new Error('Missing required database configuration');
+    }
+
+    const connectionString = `mongodb+srv://${username}:${encodeURIComponent(password)}@${process.env.MONGODB_HOST}/${database}?retryWrites=true&w=majority`;
 
     try {
         const connection = await mongoose.createConnection(connectionString, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            poolSize: 10 // Ajuste o poolSize conforme necessário
+            poolSize: 10,
+            ssl: true,
+            sslValidate: true
         });
-        console.log('Conexão com o MongoDB estabelecida com sucesso em', database);
+        console.log('MongoDB connection established successfully for database:', database);
         return connection;
     } catch (error) {
-        console.error('Erro ao conectar ao MongoDB:', error);
-        throw new Error('Falha na conexão com o MongoDB');
+        console.error('MongoDB connection error:', error.message);
+        throw new Error('Failed to connect to MongoDB');
     }
 }
 
 async function ligaDbConnection() {
     if (!cachedLigaConnection) {
-        cachedLigaConnection = await connectToDatabase(process.env.MONGODB_USERNAME, process.env.MONGODB_PASSWORD, process.env.DATABASE);
+        cachedLigaConnection = await connectToDatabase(
+            process.env.MONGODB_USERNAME,
+            process.env.MONGODB_PASSWORD,
+            process.env.DATABASE
+        );
     }
     return cachedLigaConnection;
 }
 
 async function craqueDbConnection() {
     if (!cachedCraqueConnection) {
-        cachedCraqueConnection = await connectToDatabase(process.env.MONGODB_USERNAME, process.env.MONGODB_PASSWORD, process.env.DATABASE_CRAQUE);
+        cachedCraqueConnection = await connectToDatabase(
+            process.env.MONGODB_USERNAME,
+            process.env.MONGODB_PASSWORD,
+            process.env.DATABASE_CRAQUE
+        );
     }
     return cachedCraqueConnection;
 }
@@ -44,9 +58,9 @@ async function closeAllConnections() {
             await cachedCraqueConnection.close();
             cachedCraqueConnection = null;
         }
-        console.log('Conexões com o MongoDB fechadas com sucesso');
+        console.log('MongoDB connections closed successfully');
     } catch (error) {
-        console.error('Erro ao fechar as conexões com o MongoDB:', error);
+        console.error('Error closing MongoDB connections:', error.message);
     }
 }
 
