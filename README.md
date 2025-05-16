@@ -1,6 +1,6 @@
 # League Process Ranking Scheduler
 
-Service responsible for scheduling and processing league rankings in the Craque system.
+Service responsible for scheduling and processing league rankings in the Craque system. The service retrieves and processes data to calculate user points in leagues, including score predictions and player bets, sending them to SQS for ranking calculation.
 
 ## 🚀 Technologies
 
@@ -42,13 +42,16 @@ cp .env.example .env
 serverless offline
 ```
 
-## 🔒 Security Considerations
+## 📚 Documentation
 
-- All sensitive credentials are stored in environment variables
-- MongoDB connections use SSL/TLS
-- AWS credentials are managed through IAM roles
-- SQS messages include timestamps for tracking
-- Error messages are sanitized to prevent information leakage
+Complete project documentation is available in the `docs/` folder:
+
+- [Overview](docs/00-project-overview.md)
+- [Architecture](docs/01-architecture.md)
+- [Components](docs/02-components.md)
+- [Development Process](docs/03-development-process.md)
+- [API](docs/04-api-documentation.md)
+- [Progress Log](docs/05-progress-log.md)
 
 ## 🛠️ Development
 
@@ -57,6 +60,18 @@ serverless offline
 - Local development: `serverless offline`
 - Dev deployment: `serverless deploy --stage dev`
 - Prod deployment: `serverless deploy --stage prod`
+
+### Endpoints
+
+- `POST /process-league`: Processes league ranking data
+
+## 🔒 Security Considerations
+
+- All sensitive credentials are stored in environment variables
+- MongoDB connections use SSL/TLS
+- AWS credentials are managed through IAM roles
+- SQS messages include timestamps for tracking
+- Error messages are sanitized to prevent information leakage
 
 ## 📝 License
 
